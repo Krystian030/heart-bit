@@ -1,0 +1,8 @@
+if (DEATH? > 402.5) AND (OQLsub1 <= 12.858) AND (OQLsub1 > 7.858) then (class=NYHA 2) (proba: 75.17%) | based on 149 samples
+if (DEATH? > 402.5) AND (OQLsub1 > 12.858) AND (LVEF.0 > 4.81) then (class=NYHA 2) (proba: 60.22%) | based on 93 samples
+if (DEATH? > 402.5) AND (OQLsub1 > 12.858) AND (LVEF.0 <= 4.81) then (class=NYHA 1) (proba: 64.52%) | based on 62 samples
+if (DEATH? > 402.5) AND (OQLsub1 <= 12.858) AND (OQLsub1 <= 7.858) then (class=NYHA 3) (proba: 50.0%) | based on 52 samples
+if (DEATH? <= 402.5) AND (DEATH? <= 329.5) AND (LVEF.0 <= 9.35) then (class=NYHA 3) (proba: 79.49%) | based on 39 samples
+if (DEATH? <= 402.5) AND (DEATH? > 329.5) AND (OQLsub1 > 7.767) then (class=NYHA 2) (proba: 52.94%) | based on 34 samples
+if (DEATH? <= 402.5) AND (DEATH? > 329.5) AND (OQLsub1 <= 7.767) then (class=NYHA 3) (proba: 76.47%) | based on 17 samples
+if (DEATH? <= 402.5) AND (DEATH? <= 329.5) AND (LVEF.0 > 9.35) then (class=NYHA 3) (proba: 57.14%) | based on 14 samples

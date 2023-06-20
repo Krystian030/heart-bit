@@ -1,0 +1,16 @@
+if (OQLsub1 <= 29.5) AND (LVEF.0 > 29.5) AND (MR > 1.25) AND (LVEF.0 <= 44.5) then (class=NYHA 2) (proba: 66.94%) | based on 124 samples
+if (OQLsub1 <= 29.5) AND (LVEF.0 <= 29.5) AND (OQLsub1 > 2.5) AND (OQLsub1 <= 26.0) then (class=NYHA 2) (proba: 46.88%) | based on 64 samples
+if (OQLsub1 <= 29.5) AND (LVEF.0 <= 29.5) AND (OQLsub1 <= 2.5) AND (LVEF.0 <= 27.5) then (class=NYHA 2) (proba: 61.9%) | based on 42 samples
+if (OQLsub1 > 29.5) AND (DEATH? > 0.5) AND (MR <= 2.25) AND (OQLsub1 > 35.5) then (class=NYHA 3) (proba: 52.63%) | based on 38 samples
+if (OQLsub1 > 29.5) AND (DEATH? > 0.5) AND (MR > 2.25) AND (LVEF.0 <= 34.5) then (class=NYHA 3) (proba: 75.68%) | based on 37 samples
+if (OQLsub1 <= 29.5) AND (LVEF.0 > 29.5) AND (MR <= 1.25) AND (LVEF.0 <= 35.5) then (class=NYHA 2) (proba: 57.14%) | based on 35 samples
+if (OQLsub1 <= 29.5) AND (LVEF.0 > 29.5) AND (MR <= 1.25) AND (LVEF.0 > 35.5) then (class=NYHA 1) (proba: 50.0%) | based on 30 samples
+if (OQLsub1 > 29.5) AND (DEATH? <= 0.5) AND (MR <= 1.75) AND (OQLsub1 > 33.5) then (class=NYHA 3) (proba: 50.0%) | based on 20 samples
+if (OQLsub1 > 29.5) AND (DEATH? <= 0.5) AND (MR > 1.75) AND (OQLsub1 > 39.5) then (class=NYHA 2) (proba: 64.71%) | based on 17 samples
+if (OQLsub1 <= 29.5) AND (LVEF.0 > 29.5) AND (MR > 1.25) AND (LVEF.0 > 44.5) then (class=NYHA 1) (proba: 46.15%) | based on 13 samples
+if (OQLsub1 > 29.5) AND (DEATH? <= 0.5) AND (MR > 1.75) AND (OQLsub1 <= 39.5) then (class=NYHA 2) (proba: 88.89%) | based on 9 samples
+if (OQLsub1 <= 29.5) AND (LVEF.0 <= 29.5) AND (OQLsub1 <= 2.5) AND (LVEF.0 > 27.5) then (class=NYHA 2) (proba: 44.44%) | based on 9 samples
+if (OQLsub1 <= 29.5) AND (LVEF.0 <= 29.5) AND (OQLsub1 > 2.5) AND (OQLsub1 > 26.0) then (class=NYHA 2) (proba: 75.0%) | based on 8 samples
+if (OQLsub1 > 29.5) AND (DEATH? > 0.5) AND (MR > 2.25) AND (LVEF.0 > 34.5) then (class=NYHA 2) (proba: 42.86%) | based on 7 samples
+if (OQLsub1 > 29.5) AND (DEATH? > 0.5) AND (MR <= 2.25) AND (OQLsub1 <= 35.5) then (class=NYHA 3) (proba: 100.0%) | based on 4 samples
+if (OQLsub1 > 29.5) AND (DEATH? <= 0.5) AND (MR <= 1.75) AND (OQLsub1 <= 33.5) then (class=NYHA 2) (proba: 100.0%) | based on 3 samples
