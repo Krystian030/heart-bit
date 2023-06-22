@@ -1,4 +1,4 @@
-if (DEATH? > 0.5) AND (OQLsub1 <= 0.5) then (class=NYHA 2) (proba: 57.03%) | based on 263 samples
-if (DEATH? > 0.5) AND (OQLsub1 > 0.5) then (class=NYHA 2) (proba: 46.96%) | based on 115 samples
-if (DEATH? <= 0.5) AND (OQLsub1 <= 0.5) then (class=NYHA 1) (proba: 47.22%) | based on 72 samples
-if (DEATH? <= 0.5) AND (OQLsub1 > 0.5) then (class=NYHA 2) (proba: 50.0%) | based on 10 samples
+if (DEATH? > 0.5) AND (QOL <= 0.5) then (class=NYHA 2) (proba: 57.14%) | based on 252 samples
+if (DEATH? > 0.5) AND (QOL > 0.5) then (class=NYHA 2) (proba: 42.72%) | based on 103 samples
+if (DEATH? <= 0.5) AND (QOL <= 0.5) then (class=NYHA 1) (proba: 44.93%) | based on 69 samples
+if (DEATH? <= 0.5) AND (QOL > 0.5) then (class=NYHA 2) (proba: 50.0%) | based on 10 samples

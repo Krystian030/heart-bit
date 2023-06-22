@@ -1,15 +1,8 @@
-if (6MWT.DIST > 402.5) AND (CPX.TIME <= 12.858) AND (CPX.TIME > 7.858) AND (EXERCISE1 > 3.95) then (class=NYHA 2) (proba: 77.24%) | based on 145 samples
-if (6MWT.DIST > 402.5) AND (CPX.TIME > 12.858) AND (EXERCISE1 > 4.81) AND (AF <= 0.5) then (class=NYHA 2) (proba: 53.33%) | based on 75 samples
-if (6MWT.DIST > 402.5) AND (CPX.TIME > 12.858) AND (EXERCISE1 <= 4.81) AND (6MWT.DIST > 485.0) then (class=NYHA 1) (proba: 68.97%) | based on 58 samples
-if (6MWT.DIST <= 402.5) AND (OQLsub1 > 37.5) AND (6MWT.DIST > 177.5) AND (AGE > 45.5) then (class=NYHA 3) (proba: 84.31%) | based on 51 samples
-if (6MWT.DIST > 402.5) AND (CPX.TIME <= 12.858) AND (CPX.TIME <= 7.858) AND (EXERCISE1 <= 5.85) then (class=NYHA 2) (proba: 58.82%) | based on 34 samples
-if (6MWT.DIST <= 402.5) AND (OQLsub1 <= 37.5) AND (CPX.TIME > 7.958) AND (6MWT.DIST > 290.0) then (class=NYHA 2) (proba: 65.38%) | based on 26 samples
-if (6MWT.DIST > 402.5) AND (CPX.TIME > 12.858) AND (EXERCISE1 > 4.81) AND (AF > 0.5) then (class=NYHA 2) (proba: 88.89%) | based on 18 samples
-if (6MWT.DIST > 402.5) AND (CPX.TIME <= 12.858) AND (CPX.TIME <= 7.858) AND (EXERCISE1 > 5.85) then (class=NYHA 3) (proba: 72.22%) | based on 18 samples
-if (6MWT.DIST <= 402.5) AND (OQLsub1 <= 37.5) AND (CPX.TIME <= 7.958) AND (AGE > 65.5) then (class=NYHA 3) (proba: 80.0%) | based on 10 samples
-if (6MWT.DIST <= 402.5) AND (OQLsub1 <= 37.5) AND (CPX.TIME <= 7.958) AND (AGE <= 65.5) then (class=NYHA 4) (proba: 57.14%) | based on 7 samples
-if (6MWT.DIST <= 402.5) AND (OQLsub1 <= 37.5) AND (CPX.TIME > 7.958) AND (6MWT.DIST <= 290.0) then (class=NYHA 3) (proba: 66.67%) | based on 6 samples
-if (6MWT.DIST > 402.5) AND (CPX.TIME > 12.858) AND (EXERCISE1 <= 4.81) AND (6MWT.DIST <= 485.0) then (class=NYHA 2) (proba: 100.0%) | based on 4 samples
-if (6MWT.DIST > 402.5) AND (CPX.TIME <= 12.858) AND (CPX.TIME > 7.858) AND (EXERCISE1 <= 3.95) then (class=NYHA 1) (proba: 100.0%) | based on 4 samples
-if (6MWT.DIST <= 402.5) AND (OQLsub1 > 37.5) AND (6MWT.DIST > 177.5) AND (AGE <= 45.5) then (class=NYHA 4) (proba: 100.0%) | based on 2 samples
-if (6MWT.DIST <= 402.5) AND (OQLsub1 > 37.5) AND (6MWT.DIST <= 177.5) then (class=NYHA 4) (proba: 100.0%) | based on 2 samples
+if (6MWT.DIST > 402.5) AND (CPX.TIME <= 12.858) AND (CPX.TIME > 7.858) then (class=NYHA 2) (proba: 74.29%) | based on 140 samples
+if (6MWT.DIST > 402.5) AND (CPX.TIME > 12.858) AND (EXERCISE1 > 4.81) then (class=NYHA 2) (proba: 62.22%) | based on 90 samples
+if (6MWT.DIST > 402.5) AND (CPX.TIME > 12.858) AND (EXERCISE1 <= 4.81) then (class=NYHA 1) (proba: 62.07%) | based on 58 samples
+if (6MWT.DIST > 402.5) AND (CPX.TIME <= 12.858) AND (CPX.TIME <= 7.858) then (class=NYHA 3) (proba: 54.17%) | based on 48 samples
+if (6MWT.DIST <= 402.5) AND (CPX.TIME <= 12.11) AND (6MWT.DIST <= 336.5) then (class=NYHA 3) (proba: 87.18%) | based on 39 samples
+if (6MWT.DIST <= 402.5) AND (CPX.TIME <= 12.11) AND (6MWT.DIST > 336.5) then (class=NYHA 3) (proba: 62.96%) | based on 27 samples
+if (6MWT.DIST <= 402.5) AND (CPX.TIME > 12.11) AND (6MWT.DIST > 275.0) then (class=NYHA 2) (proba: 56.52%) | based on 23 samples
+if (6MWT.DIST <= 402.5) AND (CPX.TIME > 12.11) AND (6MWT.DIST <= 275.0) then (class=NYHA 4) (proba: 55.56%) | based on 9 samples
