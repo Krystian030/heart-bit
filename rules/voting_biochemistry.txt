@@ -1,4 +1,4 @@
-if (QOL <= 1.165) AND (OQLsub1 > 118.2) then (class=NYHA 2) (proba: 59.64%) | based on 275 samples
-if (QOL > 1.165) AND (OQLsub1 > 1261.5) then (class=NYHA 3) (proba: 62.03%) | based on 79 samples
-if (QOL > 1.165) AND (OQLsub1 <= 1261.5) then (class=NYHA 2) (proba: 59.65%) | based on 57 samples
-if (QOL <= 1.165) AND (OQLsub1 <= 118.2) then (class=NYHA 1) (proba: 65.22%) | based on 23 samples
+if (OQLsub1 <= 1.165) AND (MR > 118.2) then (class=NYHA 2) (proba: 59.64%) | based on 275 samples
+if (OQLsub1 > 1.165) AND (MR > 1261.5) then (class=NYHA 3) (proba: 62.03%) | based on 79 samples
+if (OQLsub1 > 1.165) AND (MR <= 1261.5) then (class=NYHA 2) (proba: 59.65%) | based on 57 samples
+if (OQLsub1 <= 1.165) AND (MR <= 118.2) then (class=NYHA 1) (proba: 65.22%) | based on 23 samples

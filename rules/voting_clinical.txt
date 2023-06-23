@@ -1,7 +1,8 @@
-if (DEATH? <= 60.5) AND (QOL <= 1.5) AND (DEATH? <= 30.5) then (class=NYHA 2) (proba: 63.79%) | based on 58 samples
-if (DEATH? <= 60.5) AND (QOL <= 1.5) AND (DEATH? > 30.5) then (class=NYHA 2) (proba: 51.11%) | based on 45 samples
-if (DEATH? <= 60.5) AND (QOL > 1.5) AND (DEATH? > 24.0) then (class=NYHA 2) (proba: 50.0%) | based on 30 samples
-if (DEATH? > 60.5) AND (DEATH? <= 83.5) AND (OQLsub1 <= 2.25) then (class=NYHA 3) (proba: 72.0%) | based on 25 samples
-if (DEATH? > 60.5) AND (DEATH? <= 83.5) AND (OQLsub1 > 2.25) then (class=NYHA 3) (proba: 86.96%) | based on 23 samples
-if (DEATH? <= 60.5) AND (QOL > 1.5) AND (DEATH? <= 24.0) then (class=NYHA 1) (proba: 65.0%) | based on 20 samples
-if (DEATH? > 60.5) AND (DEATH? > 83.5) then (class=NYHA 4) (proba: 66.67%) | based on 6 samples
+if (OQLsub1 <= 33.5) AND (MR > 1.25) AND (OQLsub1 > 0.5) then (class=NYHA 2) (proba: 62.25%) | based on 204 samples
+if (OQLsub1 <= 33.5) AND (MR <= 1.25) AND (OQLsub1 > 2.5) then (class=NYHA 2) (proba: 51.02%) | based on 98 samples
+if (OQLsub1 > 33.5) AND (DEATH? > 0.5) AND (MR > 2.25) then (class=NYHA 3) (proba: 73.17%) | based on 41 samples
+if (OQLsub1 > 33.5) AND (DEATH? > 0.5) AND (MR <= 2.25) then (class=NYHA 3) (proba: 55.0%) | based on 40 samples
+if (OQLsub1 > 33.5) AND (DEATH? <= 0.5) AND (MR > 1.75) then (class=NYHA 2) (proba: 73.91%) | based on 23 samples
+if (OQLsub1 > 33.5) AND (DEATH? <= 0.5) AND (MR <= 1.75) then (class=NYHA 3) (proba: 50.0%) | based on 20 samples
+if (OQLsub1 <= 33.5) AND (MR > 1.25) AND (OQLsub1 <= 0.5) then (class=NYHA 1) (proba: 33.33%) | based on 6 samples
+if (OQLsub1 <= 33.5) AND (MR <= 1.25) AND (OQLsub1 <= 2.5) then (class=NYHA 1) (proba: 100.0%) | based on 2 samples
