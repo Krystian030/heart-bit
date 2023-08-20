@@ -1,0 +1,639 @@
+% Add information about preprocessing data, add analysis for each group, add plots and other stuff
+\subsection{Data Preprocessing}
+Data preprocessing is a crucial step in the data mining process, the accuracy of the model is highly dependent on the quality of the data. During the preprocessing phase, the dataset was cleaned and prepared for the analysis. The first step involved handling the NYHA column, where examples with proxy values and missing values were removed. The removal accounted for a total of 35 examples, leaving us with 434 examples to proceed with. Next, due to the large number of attributes, which amounted to 63, they were grouped into eight groups for better visualization and analysis. The groups included Clinical, Demographic, Technical, Anthropometry, Comorbidities, Treatment, Biochemistry, and Fitness level. With the attributes grouped, we proceeded to analyze each group separately. Our objective was to identify the missing values, outliers, and proxy values within the respective groups. By conducting individual analyses for each attribute group, we could gain a deeper understanding of their unique properties and address any data quality issues. 
+In our study, we conducted an analysis on each group by removing the NYHA column, which served as the target attribute, and then examining the remaining attributes. 
+Subsequently, we developed decision tree models based on the results of these analyses to determine the most influential attributes within each group.
+The process began with the removal of the NYHA column from each group, enabling us to focus solely on the attributes. We then applied analysis to investigate the relationships and dependencies among these attributes. By employing decision tree model, which is well-suited for classification tasks, we could discern the attributes that played a pivotal role in predicting the target NYHA classification. 
+The primary objective of this analysis was to rank the attributes based on their correlation with the target attribute, thereby identifying the most influential features within each group. By selecting the top-ranking attributes, we selected the most important features to build the decision tree model specific to that particular group. This model served as a key component in one of the three approaches we employed, which was based on an ensemble learning method. Below are the descriptions and specific analyses conducted for each group.
+
+\subsubsection{Clinical Group description and analysis}
+        The clinical group is composed of 12 attributes that provide crucial clinical information pertaining to the health conditions of heart failure patients. Table \ref{tab:clinical group} presents a detailed description of each attribute, including its data type, the quantity of missing values, and a brief explanation of its significance.
+        
+        \begin{table}[H]
+        \centering
+        \caption{Description of Attributes in the Clinical Group}
+        \label{tab:clinical group}
+            \begin{adjustbox}{center}
+            \begin{tabular}{|p{2cm}|p{10cm}|p{1.8cm}|p{1.8cm}|}
+            \hline
+                \textbf{Variable} & \textbf{Description}                                                                                   & \textbf{Data Type} & \textbf{Missing Values} \\ \hline
+                DEATH?            & Information if the patient is death (1), or alive (0).                                                 & Binary             & 77                      \\
+                QOL               & Result of the survey measuring the quality of life (QoL, total score range 0–105, from best to worst). & Integer            & 183                     \\
+                OQLsub1           & Scores for a QoL subscale - physical dimension (8 items, range 0–40 from best to worst).               & Integer            & 206                     \\
+                OQLsub2           & Scores for a QoL subscale - emotional dimension (5 items, range 0–25 from best to worst).              & Integer            & 206                     \\
+                LVEF.0 &
+                  Left ventricular ejection fraction - information from the heart ultrasound reflecting the efficiency of pumping. According to the definition value = 45 or lower is characteristic for systolic heart failure. &
+                  Integer &
+                  3 \\
+                PM                & Information about artificial pacemaker (0=no pacemaker).                                               & Binary             & 69                      \\
+                AETH.HF           & Information about the clinical cause of heart failure (1=ischemic disease or 2 = other).               & Binary             & 4                       \\
+                LVEDD             & Parameter from heart ultrasound: left ventricular end diastolic diameter (increased in heart failure). & Integer            & 133                     \\
+                MR                & Mitral regurgitation (valvular heart disease), bigger number = worse.                                  & Real               & 138                     \\
+                REST.SBP          & Systolic blood pressure at rest.                                                                       & Integer            & 105                     \\
+                REST.DBP          & Diastolic blood pressure at rest.                                                                      & Integer            & 105                     \\
+                REST.HR           & Heart rate at rest.                                                                                    & Integer            & 106                     \\ \hline
+            \end{tabular}
+            \end{adjustbox}
+        \end{table}
+        
+        The total number of missing values in the clinical group is 1335. To address this issue and ensure the quality of the data, we conducted specific data handling techniques for each attribute.
+        
+        For the attribute "DEATH?" a binary variable indicating whether the patient is alive or dead, we set all missing values to 0, signifying that the patients with missing values are alive.
+        
+        Regarding "QOL" a integer attribute presenting the result of a quality of life survey, with scores ranging from 0 to 105, we identified some values exceeding the valid range. To rectify this, we capped all values larger than 105 to 105. For missing values, we employed backfill (bfill) method, which uses the next valid observation to fill the gap.
+        
+        The attribute "OQLsub1" which provides scores for a QoL subscale focusing on the physical dimension (0-40) also contained values larger than 40. To address this issue, we capped all values larger than 40 to 40. Similar to previous attributes, missing values were imputed using the backfill method.
+        
+        The attribute "OQLsub2" representing scores for a QoL subscale focused on the emotional dimension (0-25), we observed values beyond the valid range. Consequently, we capped all values larger than 25 to 25. Missing values were imputed using the backfill method.
+        
+        The integer attribute "LVEF.0" reflecting the left ventricular ejection fraction from a heart ultrasound, had only 3 missing values. We imputed these values using the backfill method.
+        
+        For the binary attribute "PM" indicating whether the patient has an artificial pacemaker, we set all missing values to 0, implying that patients with missing values do not have an artificial pacemaker.
+        
+        In the case of "AETH.HF" a binary attribute indicating the clinical cause of heart failure, we discovered that the values were one unit higher than the defined categories. To reflect this, we subtracted 1 from all values. Missing values were set to 0, indicating that the clinical cause of heart failure is unknown.
+        
+        The integer attribute "LVEDD" representing the left ventricular end diastolic diameter from a heart ultrasound, had 133 missing values, which were imputed using the backfill method.
+        
+        The real attribute "MR" describing the severity of mitral regurgitation (valvular heart disease), had 138 missing values, which were replaced with the most frequent value in the attribute.
+        
+        For the numerical attributes "REST.SBP", "REST.DBP", and "REST.HR" representing systolic blood pressure, diastolic blood pressure, and heart rate at rest, respectively, we imputed the missing values using the backfill method.
+
+        After applying these data handling techniques, we proceeded with further analysis of the clinical group. To better understand the relationships among the attributes, we computed the correlation matrix and plotted the heatmap. Figure \ref{fig:clinical group heatmap} presents the heatmap of the correlation matrix.
+        
+        \begin{figure}[H]
+        \includegraphics[width=\textwidth]{clinical group heatmap.png}
+        \caption{Heatmap of the correlation matrix for the Clinical Group}
+        \label{fig:clinical group heatmap}
+        \end{figure}
+
+        Each cell in the heatmap represents the correlation coefficient between the corresponding pair of attributes. The correlation coefficient is a value between -1 and 1, where -1 indicates a strong negative correlation, 0 indicates no correlation, and 1 indicates a strong positive correlation. The darker the color of the cell, the higher the correlation between the two attributes.  This correlation matrix helped us identify valuable insights into attribute associations, enabling us to identify the potential patterns and dependencies. 
+
+        To improve the model's performance and reduce multicollinearity, we identified and removed redundant attributes with a correlation with target attribute lower than 0.18. This process allowed us to focus on the most informative features and reduce the number of attributes from 12 to 4.
+        
+        The attributes that were removed are "REST.SBP", "LVEF.0", "LVEDD", "REST.DBP", "OQLsub2", "PM", "AETH.HF", and "REST.HR". Additionally, we removed the "OQLsub1" due to its high correlation with the "QoL", minimizing attribute redundancy and focusing on the most informative features.
+        After these steps, we were left with 3 attributes: "QoL", "MR", and "DEATH?". We used these attributes to train the decision tree model and extract the feature importances.
+
+        Next, we prepared the data for the decision tree model. The target attribute NYHA was separated from the feature set, setting the stage for training the classifier and extracting attribute importances.
+        
+        The decision tree classifier allowed us to construct a powerful predictive model based on the prepared data. To optimize its performance, we engaged in hyperparameter tuning using a grid search, fine-tuning the model's parameters for optimal results.Selecting the best estimator from the grid search, we obtained our final clinical group model.
+
+        By training the decision tree on the prepared data, we obtained the feature importances, which allowed us to identify the most relevant attributes for predicting the target attribute for this group. Table \ref{tab:clinical group feature importances} presents the feature importances in descending order for the clinical group.
+        
+        \begin{table}[H]
+            \centering
+            \caption{Feature importances for the clinical group in descending order}
+            \label{tab:clinical group feature importances}
+            \begin{adjustbox}{center}
+                \begin{tabular}{|l|l|}
+                    \hline
+                    \textbf{Variable} & \textbf{Importance} \\ \hline
+                    QOL               & 0.813847         \\
+                    MR                & 0.138863         \\
+                    DEATH?            & 0.04729          \\ \hline
+                    \end{tabular}
+            \end{adjustbox}
+        \end{table}
+
+        The feature importances helped us identify the most relevant attributes for clinical group. The most important attribute was "QoL", followed by "MR" and "DEATH?". The "QoL" attribute had the highest importance, indicating that it is the most relevant attribute for predicting the target attribute. The "MR" attribute was the second most important, followed by "DEATH?". The "MR" attribute had a significantly lower importance than the "QoL" attribute, indicating that it is less relevant for predicting the target attribute. The "DEATH?" attribute had the lowest importance, indicating that it is the least relevant attribute for predicting the target attribute. For further analysis we used these three attributes as representative of the clinical group.
+   
+\subsubsection{Demographic Group description and analysis}
+        
+        The demographic group in our study focuses on a single variable "AGE". This variable represents the age of individuals at the time of examination, and its serves as a crucial factor in understanding how age influences heart failure patients' functional status.
+
+        Before proceeding with the analysis, we validated the integrity of the "AGE" data. We ensured that the "AGE" column contained integer values and checked for any missing data. To address missing values, we utilized a backfill method to impute the data. Additionally, since age is typically represented as a integer number, we rounded the age values from decimal to integer. 
+        
+        To explore the relationship between age and the NYHA classification, we visualized the correlation between these two variables. Figure \ref{fig:age nyha correlation} presents the correlation between age and NYHA classification.
+
+        \begin{figure}[H]
+        \centering
+        \includegraphics[]{age nyha correlation.png}
+        \caption{Heatmap of the correlation matrix for the Demographic Group}
+        \label{fig:age nyha correlation}
+        \end{figure}
+        
+        The correlation between age and NYHA classification was 0.21 indicating a medium positive correlation. This correlation coefficient indicates that there is a positive relationship between age and NYHA classification. As age increases, the NYHA classification also increases. This result is consistent with our hypothesis that age is a significant factor in determining the NYHA classification.
+
+        While we do not develop a predictive model for the demographic group due to presence of a single variable, our analysis of age and its impact on NYHA provides valuable insights will be used in the our overall predictive model.
+
+\subsubsection{Technical Group description and analysis}
+        
+        The technical group comprises variables that are not directly related to the patient's health but provide essential supplementary information. Table \ref{tab:technical group attributes} presents the variables in the technical group.
+
+        \begin{table}[H]
+            \centering
+            \caption{Description of Attributes in the Technical Group}
+            \label{tab:technical group attributes}
+            \begin{adjustbox}{center}
+                 \begin{tabular}{|p{2.6cm}|p{10cm}|p{1.6cm}|p{1.8cm}|}
+                    \hline
+                    \textbf{Variable} &
+                      \textbf{Description} &
+                      \textbf{Data Type} &
+                      \textbf{Missing Values} \\ \hline
+                    DEATHDATE &
+                      Date of death (if death=1) or date of the confirmation that the patient is still alive. &
+                      Date &
+                      78 \\
+                    TIMEFU &
+                      Number of days between examination and date death or date of the confirmation that the patient is still alive. &
+                      Integer &
+                      97 \\
+                    DOB & Date of birth.           & Date & 7 \\
+                    DOE & Date of the examination. & Date & 0 \\ \hline
+                    \end{tabular}
+            \end{adjustbox}
+        \end{table}
+
+        Upon analyzing the technical group, we encountered 182 total missing values. To address this issue and ensure the data's quality, we utilized specific data handling techniques for each attribute.
+
+        The "DEATHDATE" attribute is a date attribute that represents the date of death (if death=1) or date of the confirmation that the patient is still alive. This attribute had 78 missing values. To address this issue, we utilized a backfill method to impute the data. 
+
+        For "TIMEFU" attribute, representing the number of days between the examination and date of death or confirmation of being alive, we encountered some incorrect string values. To address this issue, we converted these erroneous values to Not a Number (NaN) values. Subsequently, like the "DEATHDATE" attribute, we utilized a backfill method to impute the data.
+
+        The "DOB" attribute, representing the date of birth, had a few missing values. Similar to the previous attributes, we utilized a backfill method to impute the data.
+
+        The "DOE" attribute, indicating the date of the examination, did not contain any missing values. Therefore, no further handling was required for this attribute.
+
+        To better understand the relationships among the attributes in the technical group, we conducted a correlation analysis. Figure \ref{fig:technical group correlation} presents the correlation matrix for the technical group.
+
+        \begin{figure}[H]
+        \centering
+        \includegraphics[]{technical group correlation.png}
+        \caption{Correlation matrix for the technical group}
+        \label{fig:technical group correlation}
+        \end{figure}
+
+        However, the correlation matrix did not provide any meaningful insights. Consequently, we concluded that the variables within the technical group do not contribute significantly to predicting the NYHA functional classification in heart failure patients. Because of this, and the fact that the attributes DOB and DOE are related with the AGE attribute from the demographic group, we decided to exclude the technical group from our analysis.
+
+\subsubsection{Anthropometric Group description and analysis}
+
+        The antropometric group refers to measurements that determine the size, shape, and composition of the human body. Whlie they might not offer direct insights into a patient's health, they provide context that can influence clinical desisions and understanding of health trajectories. Table \ref{tab:anthropometric group attributes} provides an overview of the variables in the anthropometric group.
+
+        \begin{table}[H]
+          \centering
+          \caption{Description of Attributes in the Anthropometric Group}
+          \label{tab:anthropometric group attributes}
+          \begin{adjustbox}{center}
+          \begin{tabular}{|p{2.6cm}|p{10cm}|p{1.6cm}|p{1.8cm}|}
+          \hline
+          \textbf{Variable} &
+          \textbf{Description} &
+          \textbf{Data Type} &
+          \textbf{Missing Values} \\ \hline
+          HEIGHT & Patient's height in centimeters. & Real & 0 \\
+          WEIGHT & Patient's weight in kilograms. & Real & 0 \\
+          BMI & Body mass index, calculated as weight divided by height squared. & Real & 0 \\
+          \hline
+          \end{tabular}
+          \end{adjustbox}
+        \end{table}
+
+        The anthropometric group did not contain any missing values. Therefore, no further handling was required for this group. 
+
+        To discern the relationships among the attributes in the anthropometric group and their connection with the NYHA functional classification, we conducted a correlation analysis. The results are presented in Figure \ref{fig:anthropometric group correlation}.
+
+        \begin{figure}[H]
+          \centering
+          \includegraphics[]{anthropometric group correlation.png}
+          \caption{Correlation matrix for the anthropometric group}
+          \label{fig:anthropometric group correlation}
+        \end{figure}
+
+        From the correlation matrix, it is evident that the correlation between the antropometric attributes (HEIGHT, WEIGHT, and BMI) and the NYHA functional classification is minimal. The highest correlation is between the BMI and WEIGHT (0.9), which is expected as BMI is derived measure from the HEIGHT and WEIGHT. However, their correlation with the NYHA class is extremely low (-0.017 for WEIGHT, and 0.0097 for BMI).
+
+        In light of these findings, and given the lack of significant correlation with the NYHA class, we have decided to exlude the anthropometric group from our further analysis for predicting the NYHA functional classification in heart failure patients.
+
+    
+\subsubsection{Comorbidities Group description and analysis}
+        The comorbidities group encompasses variables that denote the presence of other coexisting chronic diseases or conditions in the patients. These comorbidities may significantly affect the course and prognosis of heart failure. Table \ref{tab:comorbidities group attributes} summarizes the variables in this group.
+
+        \begin{table}[H]
+          \centering
+          \caption{Description of Attributes in the Comorbidities Group}
+          \label{tab:comorbidities group attributes}
+          \begin{adjustbox}{center}
+          \begin{tabular}{|p{2.6cm}|p{10cm}|p{1.6cm}|p{1.8cm}|}
+          \hline
+          \textbf{Variable} &
+          \textbf{Description} &
+          \textbf{Data Type} &
+          \textbf{Missing Values} \\ \hline
+          MI &
+          Information about previous myocardial infarction (1=yes) &
+          Binary &
+          21 \\
+          AF &
+          Information about atrial fibrillation (1=yes) &
+          Binary &
+          4 \\
+          DM & Information about diabetes (1=yes) &
+          Binary &
+          21 \\
+          HT & Information about hypertension (1=yes) &
+          Binary &
+          95 \\
+          COPD & Information about lung disease (1=yes) &
+          Binary &
+          37 \\
+          STROKE & Information about previous stroke (1=yes) &
+          Binary &
+          35 \\
+          KIDNEY.DIS & Information about kidney disease (1=yes) &
+          Binary &
+          70 \\
+          \hline
+          \end{tabular}
+          \end{adjustbox}
+          \end{table}
+    There were 283 missing values in total. Each missing values for the comorbidities group was imputed with the 0, indicating the absence of the corresponding comorbidity.
+
+  The correlation matrix for this group (presented in Figure \ref{fig:comorbidities group correlation}) suggests a relatively stronger correlation between certain comorbidities and the NYHA class compared to the previous groups.
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[]{comorbidities group correlation.png}
+    \caption{Correlation matrix for the comorbidities group}
+    \label{fig:comorbidities group correlation}
+  \end{figure}
+
+  The DM (diabetes mellitus), AF (artial fibrillation), and KIDNEY.DIS (kidney disease) variables exhibit the strongest correlation with the NYHA class, each with correlations of 0.22, 0.21, and 0.21 respectively. Additionaly, COPD (chronic obstructive pulmonary disease), despite having a lower correlation, has a correlation of 0.13. HT (hypertension) has a relatively lower correlation of 0.026, while MI (myocardial infarction) and STROKE have correlations 0f 0.061 and 0.055 respectively. These correlations suggest that these comorbidities may influence the severity  of heart failure, as classified by the NYHA. 
+
+  Following the exclusion of attributes with correlation lower than 0.15, we retained DM, AF, and KIDNEY.DIS for further analysis.
+
+  By focusing on these specific comorbidities, we derived an optimized predictive model. This model, based on the selected features, aims to predict the NYHA classification efficiently. This approach allows us to uncover the most substantial comorbidities that affect the severity of heart failure. In the following table (Table \ref{tab:comorbidities group feature importances}), we present the final list of the most influential comorbidities, in descending order of importance.
+
+  \begin{table}[H]
+    \centering
+    \caption{Feature importances for the comorbidities group in descending order}
+    \label{tab:comorbidities group feature importances}
+    \begin{adjustbox}{center}
+    \begin{tabular}{|l|l|}
+    \hline
+    \textbf{Variable} & \textbf{Importance} \\ \hline
+    DM & 0.442883 \\
+    KIDNEY.DIS & 0.342886 \\
+    AF & 0.214231 \\ \hline
+    \end{tabular}
+    \end{adjustbox}
+  \end{table}
+
+  The results suggest that diabetes mellitus is the most influential comorbidity, followed by kidney disease and atrial fibrillation. These comorbidities were found to be the most critical contributors to the NYHA based on their strong correlations and feature importances, thus we have decided to retain them for further analysis, and include them as representative comorbidities for the comorbidities group.
+
+\subsubsection{Treatment Group description and analysis}
+
+        The treatment group is composed of 5 attributes, each detailing a specific treatment regimen for heart failure patients. A detailed description of these attributes is provided in Table \ref{tab:treatment group attributes}.
+
+        \begin{table}[H]
+          \centering
+          \caption{Description of Attributes in the Treatment Group}
+          \label{tab:treatment group attributes}
+          \begin{adjustbox}{center}
+          \begin{tabular}{|p{2cm}|p{10cm}|p{1.8cm}|p{1.8cm}|}
+          \hline
+          \textbf{Variable} & \textbf{Description} & \textbf{Data Type} & \textbf{Missing Values} \\ \hline
+          ACEI.ARB & Information about treatment using ACE inhibitors or ARBs (similar drugs, 1=yes, 0=no). & Binary & 1 \\
+          BB & Information about treatment using beta blockers (1=yes, 0=no). & Binary & 1\\
+          MRA & Information about treatment using aldosterone antagonists (1=yes, 0=no). & Binary & 12 \\
+          DIUR & Information about treatment using oral diuretics (1=yes, 0=no). & Binary & 5 \\
+          ANTIPLAT & Information about treatment using antiplatelet drugs (1=yes, 0=no). & Binary & 1 \\
+          STATIN & Information about treatment using statin (1=yes, 0=no). & Binary & 2 \\
+          DIGOX & Information about treatment using digoxin (1=yes, 0=no). & Binary & 2 \\ \hline
+          \end{tabular}
+          \end{adjustbox}
+        \end{table}
+
+        The total number of missing values in the treatment group is 24. To address this issue, for each binary attribute indicating the medication the patient is taking, we set all missing values to 0, signifying that the patients with missing values are not taking the corresponding medication.
+
+        Upon this preliminary data handling, we further scrutinized the relationships among the treatment attributes. We computed a correlation matrix and visualized it in a heatmap as shown in Figure \ref{fig:treatment group heatmap}.
+
+        \begin{figure}[H]
+          \includegraphics[width=\textwidth]{treatment group correlation.png}
+          \caption{Heatmap of the correlation matrix for the Treatment Group}
+          \label{fig:treatment group heatmap}
+        \end{figure}
+      
+        Using a correlation threshold of 0.2, we honed our focus on the treatments showing substantial correlations with the NYHA classification. Specifically, "DIGOX" (digoxin treatment) and "DIUR" (oral diuretic treatment) demonstrated correlations of 0.23 and 0.27, respectively, with NYHA scores.
+
+        This suggests that these treatments are notably associated with advanced heart failure stages, as indicated by elevated NYHA scores. Accordingly, we used only the "DIGOX" and "DIUR" attributes to train the decision tree model, the importances of which are displayed in Table \ref{tab:treatment group feature importances}.
+        
+        \begin{table}[H]
+          \centering
+          \caption{Feature importances for the treatment group in descending order}
+          \label{tab:treatment group feature importances}
+          \begin{adjustbox}{center}
+              \begin{tabular}{|l|l|}
+                  \hline
+                  \textbf{Variable} & \textbf{Importance} \\ \hline
+                  DIUR               & 0.663674        \\
+                  DIGOX            & 0.336326         \\ \hline
+                  \end{tabular}
+          \end{adjustbox}
+      \end{table}
+
+      This model presented feature importances of 0.66 and 0.34 for "DIUR" and "DIGOX", respectively. These importances indicates that the DIUR carries more weight in the model's determination of the NYHA classification, asserting its significance within the treatment group. In conclusion, "DIGOX" and "DIUR" are both selected as the final representative attributes of the treatment group due to their discernible impact on heart failure. 
+
+\subsubsection{Biochemistry Group description and analysis}
+      The biochemistry group consists of variables that depict the results of biochemistry tests, thus providing insights into the physiological state of the patients with heart failure. Table \ref{tab:biochemistry group attributes} below gives a detailed description of the attributes in the biochemistry group.
+
+      \begin{table}[H]
+        \centering
+        \caption{Description of Attributes in the Biochemistry Group}
+        \label{tab:biochemistry group attributes}
+        \begin{adjustbox}{center}
+        \begin{tabular}{|p{2cm}|p{10cm}|p{1.8cm}|p{1.8cm}|}
+        \hline
+        \textbf{Variable} & \textbf{Description} & \textbf{Data Type} & \textbf{Missing Values} \\ \hline
+        HB & Level of blood hemoglobin & Real & 12 \\
+        NA & Level of blood sodium & Real & 11\\
+        K & Level of blood potassium & Real & 12 \\
+        BNP & Level of blood peptide BNP (Elevated level is characteristic for heart failure) & Real & 41 \\
+        CRP & Level of blood protein CRP (Characteristic for inflammation) & Real & 126 \\ \hline
+        \end{tabular}
+        \end{adjustbox}
+      \end{table}
+
+      The biochemistry group contains a total of 202 missing values distributed among its attributes. In handling these, the bfill method was applied to each attribute. This strategy uses the next valid observation in the dataset to fill the gap caused by a missing value.
+
+      To investigate the relationships among the variables in the Biochemistry group, a correlation matrix was computed and visualized in a heatmap as shown in Figure \ref{fig:biochemistry group heatmap}.
+
+      \begin{figure}[H]
+        \includegraphics[width=\textwidth]{biochemistry group correlation.png}
+        \caption{Heatmap of the correlation matrix for the Biochemistry Group}
+        \label{fig:biochemistry group heatmap}
+      \end{figure}
+
+      Setting a correlation threshold of 0.25, a clearer understanding of the relationships between the biochemistry variables and NYHA classification emerged. The variables "BNP", "K", and "HB" were found to exhibit statistically significant correlations with the NYHA, with respective correlation coefficients of 0.32, 0.3, and -0.28.
+
+      These correlations suggests that the levels of "BNP", "K", and "HB" may have notable associations with the NYHA classification. Consequently, subsequent iterations of the decision tree model were trained exclusively using the "BNP", "K", and "HB" attributes. The table \ref{tab:biochemistry group feature importances} below ilustrates the feature importance for the Biochemistry group in descending order.
+
+      \begin{table}[H]
+        \centering
+        \caption{Feature importances for the biochemistry group in descending order}
+        \label{tab:biochemistry group feature importances}
+        \begin{adjustbox}{center}
+            \begin{tabular}{|l|l|}
+                \hline
+                \textbf{Variable} & \textbf{Importance} \\ \hline
+                BNP               & 0.393258        \\
+                K               & 0.339789        \\
+                HB            & 0.266953         \\ \hline
+                \end{tabular}
+        \end{adjustbox}
+    \end{table}
+
+    The decision tree model computed feature importances of 0.393258, 0.339789, and 0.266953 for 'BNP', 'K', and 'HB', respectively. These values suggest that within the Biochemistry group, the 'BNP', 'K', and 'HB' variables have a significant influence on the model's prediction of NYHA classification. Therefore, 'BNP', 'K', and 'HB' are selected as the final representative features of the Biochemistry group.
+
+\subsubsection{Fitness Level Group description and analysis}
+
+The Fitness Level Group consists of variables that provide insights into a patient's fitness level. There are a most of variables in comparison to the other groups, with a total of 23 variables.
+These variables range from simple exercise tasks to more detailed metrics derived from treadmill tests. The table \ref{tab:fitness level group attributes} below gives a detailed description of the attributes in the Fitness Level Group.
+
+\begin{table}[H]
+    \centering
+    \caption{Description of Attributes in the Fitness Level Group}
+    \label{tab:fitness level group attributes}
+    \begin{adjustbox}{center}
+    \begin{tabular}{|p{4.5cm}|p{10cm}|p{1.8cm}|p{1.5cm}|}
+    \hline
+    \textbf{Variable} & \textbf{Description} & \textbf{Data Type} & \textbf{Missing Values} \\ \hline
+    EXERCISE1 & Number of seconds needed to complete the task (higher = worse). & Real & 6 \\
+    EXERCISE2 & Number of repeated movements during the task (higher = better). & Real & 6 \\
+    EXERCISE3 & Number of repeated movements during the task (higher = better). & Real & 6 \\
+    6MWT.DIST & Distance covered by the patient during the 6MWT (higher = better). & Real & 5 \\
+    6MWT.FATIGUE & Level of fatigue after 6MWT, scale 0-10. & Integer & 88 \\
+    6MWT.DYSPN & Level of breathlessness during 6MWT, scale 0-10. & Integer & 88 \\
+    6MWT.SBP1 & Systolic blood pressure before the 6MWT. & Real & 47 \\
+    6MWT.DBP1 & Diastolic blood pressure before the 6MWT. & Real & 48 \\
+    6MWT.HR1 & Heart rate before the 6MWT. & Real & 48 \\
+    6MWT.SBP2 & Systolic blood pressure after the 6MWT. & Real & 48 \\
+    6MWT.DBP2 & Diastolic blood pressure after the 6MWT. & Real & 48 \\
+    6MWT.HR2 & Heart rate after the 6MWT. & Real & 50 \\
+    EXERCISE4 & Patient's ability to touch feet with fingers of palms (higher = better). & Real & 68 \\
+    EXERCISE5 & Patient's ability to touch left palm with the right one at back (higher = better). & Real & 69 \\
+    CPX.TIME & Time of exercise on a treadmill. & Real & 114 \\
+    CPX.PEAKVO2 & Peak oxygen consumption during treadmill exercise. & Real & 187 \\
+    CPX.PEAKVO2FORBM & Peak oxygen consumption per body mass during treadmill exercise. & Real & 51 \\
+    RER & Respiratory exchange ratio during treadmill exercise. & Real & 81 \\
+    SLOPE & Slope between oxygen and carbon dioxide during treadmill testing. & Real & 52 \\
+    METS & Number of metabolic equivalents during treadmill exercise. & Real & 182 \\
+    WEBER & Weber classification for physical capacity (higher class = worse). & Integer & 51 \\
+    PEAK>18 & Patients divided by peak oxygen consumption cutoff. & Binary & 51 \\
+    SLOPE>35 & Patients divided by slope cutoff for Weber classification. & Binary & 85 \\ \hline
+    \end{tabular}
+    \end{adjustbox}
+\end{table}
+
+In this group, we identified a total of 1,479 missing values distributed across various attributes. To address these, we implemented a range of strategies tailored to the extent of the missing data. For attributes with a relatively small number of missing values, such as EXERCISE1, EXERCISE2, EXERCISE3, and 6MWT.DIST, we replaced the gaps with the mean of the respective attribute.
+
+For attributes that had a larger volume of missing data, like 6MWT.FATIGUE, 6MWT.DYSPN, CPX.TIME, and CPX.PEAKVO2, we adopted a more sophisticated backfill method. This approach ensures that these columns are both accurate and complete.
+
+It's important to note that attributes such as 6MWT.FATIGUE, 6MWT.DYSPN, and CPX.PEAKVO2 had a considerable number of missing values. Despite this challenge, we opted to retain them in our dataset, leveraging the backfill strategy to ensure their integrity.
+
+After these measures, we reviewed the dataset and confirmed that all missing values had been successfully addressed, laying a solid foundation for the subsequent analysis. 
+
+For better insights into the Fitness Level Group, we computed the correlation matrix for each attribute in the group. The heatmap in figure \ref{fig:fitness level group heatmap} below illustrates the correlation matrix for the Fitness Level Group.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Correlation matrix for fitness level.png}
+    \caption{Heatmap of the correlation matrix for the Fitness Level Group}
+    \label{fig:fitness level group heatmap}
+\end{figure}
+
+In our analysis of the correlation matrix, we set a threshold of 0.35 for correlation with the target attribute. Based on this threshold, we identified the following 10 attributes as having a strong correlation with the target attribute: 6MWT.DIST, EXERCISE2, EXERCISE3, CPX.TIME, EXERCISE1, CPX.PEAKVO2FORBM, WEBER, METS, PEAK>18, 6MWT.DYSPN. 
+
+However, upon a closer examination of inter-variable relationships, we observed a high degree of correlation between amoing these attributes. Such multicollinearity can be problematic, particulary when developing models like decision tree, as it can result in overfitting and reduced interpretability.
+
+Considering this, for the construction of our decision tree, we opted to use only the 6MWT.DIST, CPX.TIME, and EXERCISE1 attributes. These attributes had the highest correlation with the target attribute, while also having a low degree of correlation with each other.
+
+In the Table \ref{tab: fitness level group feature importances} below, we present the feature importances in descending order for the chosen representative attributes.
+
+\begin{table}[H]
+    \centering
+    \caption{Feature Importances for the Fitness Level Group}
+    \label{tab: fitness level group feature importances}
+    \begin{adjustbox}{center}
+    \begin{tabular}{|p{4.5cm}|p{10cm}|}
+    \hline
+    \textbf{Attribute} & \textbf{Feature Importance} \\ \hline
+    6MWT.DIST & 0.519437 \\
+    CPX.TIME & 0.377920 \\
+    EXERCISE1 & 0.102643 \\ \hline
+    \end{tabular}
+    \end{adjustbox}
+\end{table}
+
+By focusing on these pivotal attributes, we decided to exclude the remaining attributes in the Fitness Level Group from our analysis. This approach allowed us to reduce the complexity of our model, while also ensuring that the most important attributes were included.
+
+
+% CART algorithm  + 10-cross validation with stratification for testing   
+% bibliotek scikilearner, w szczegolnosci
+% algorytmy klasyfikacji +  + model uczenia zespolowego
+% usunąć bullet pointy - dodać grafikę z przepływem danych i metodzie uczenia modelu (dla  drzewa decyzyjnego oraz dla uczenia grupowego)
+% Użyliśmy trzech metod uczenia:
+
+
+% 1. Drzewo decyzyjne na podstawie wcześniejszych uzsykanych atrybutów reprezentacyjnych
+
+% 2. VotingClassifier - The idea behind the VotingClassifier is to combine conceptually different machine learning classifiers and use a majority vote or the average predicted probabilities (soft vote) to predict the class labels. Such a classifier can be useful for a set of equally well performing models in order to balance out their individual weaknesses.
+% https://scikit-learn.org/stable/modules/ensemble.html#voting-classifier
+
+
+% 3. Forests of randomized trees (Random Forests) 
+
+
+
+% \subsubsection{CART algorithm}
+% 
+% CART (Classification and Regression Trees) is simple algorithm for classification and regression. 
+
+
+\subsection{Methods}
+
+In the conducted research, we used three methods of learning. Traiditional CART algorithm, and two ensemble methods - Voting Classifier and Random Forest.
+
+
+\subsubsection{Method using CART algorithm}
+CART, which stands for Classification And Regression Trees, is a straightforward technique used for both classification and regression tasks. It operates by building a binary tree where every node signifies a specific check or condition on a single attribute. The tree grows from the top-down, employing a recursive method that continually divides data until it meets certain criteria. The process stops either when all instances at a particular node fall into a single category or when further division doesn't enhance the predictive accuracy. 
+In our study we took advantage of the CART algorithm from Scikit-Learn library. For the Decision Tree Classifier, we employed the Gini criterion which measures the frequency at which a randomly chosen element would be incorrectly classified. The tree was constrained to a maximum depth of 6 levels, ensuring simplicity and interpretability. We also specified that each leaf node should contain at least 4 samples, and any internal node requires at least 4 samples to consider a further split.  
+
+The data preprocessing phase enabled us to isolate a subset of key attributes from each group, which were then employed to construct the decision tree. The procedural breakdown of the data processing is depicted in the flow chart shown in figure \ref{fig:flow chart of data processing} below.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{CART.drawio.png}
+    \caption{Flow chart of data processing for Cart algorithm}
+    \label{fig:flow chart of data processing}
+\end{figure}
+
+From the diagram, it's evident which attributes were deemed essential from each group, following the preprocessing steps. Our dataset comprises 
+434 instances and 16 pivotal attributes, which served as the foundation for the construction of the decision tree.
+
+% Poprawić tabele
+\begin{table}[H]
+  \centering
+  \caption{Summary of the selected attributes for the classification model}
+  \begin{tabular}{|p{2.5cm}|p{10cm}|p{2.3cm}|}
+  \hline
+  \textbf{Variable} & \textbf{Data Type \& Description} \\ \hline
+  6MWT.DIST & 
+  Integer; the distance (in meters) covered by the patient during the 6 minute walking test (\textit{the higher the value the better}).     
+  \\
+  CPX.TIME           & 
+  Real; the exercise duration (in minutes) on a treadmill (\textit{the higher the value the better}). 
+  \\
+  EXERCISE1 &
+  Real; the duration (in minutes) needed to complete the task (\textit{the higher the value the worse}).
+  \\
+  AGE                & 
+  Integer; patient age at the time of examination.
+  \\
+  DIGOX              & 
+  Binary; information about treatment using digoxin (1=yes).      
+  \\
+  AF                 &
+  Binary; information about atrial fibrillation (1=yes).
+  \\
+  OQLsub1   &
+  Integer; scores for a QoL subscale - physical dimension, having 8 items, and with range from 0 to 40 (\textit{from the best to the worst}).
+  \\
+  KIDNEY.DIS         & 
+  Binary; information about kidney disease (1=yes).
+  \\
+  DIUR               & 
+  Binary; information about treatment using oral diuretics (1=yes).                
+  \\
+  DEATH?             & 
+  Binary; information if the patient is death (1), or alive (0).
+  \\ 
+  \hline
+  \end{tabular}
+\end{table}
+
+\subsubsection{Method using Voting Classifier}
+The Voting Classifier represents an ensemble learning technique. Its core principle is to combine various distinct machine learning classifiers and use either a majority consensus or the mean of predicted probabilities (soft voting) to derive the class labels. Employing such a classifier is advantageous when working with a set of models that perform equivalently well, helping to counterbalance their individual shortcomings. In our study, we utilized the soft voting mechanism of the Voting Classifier algorithm from the Scikit-Learn library. Through this soft voting method, the class label is determined by choosing the one with the highest aggregated predicted probability.
+
+For data preprocessing in the groups of Clinical, Comorbidities, Treatment, Biochemistry, and Fitness Level, we established straightforward decision tree models for each specified group. The procedure followed during this data preprocessing is visualized in the flow chart in figure \ref{fig:flow chart of data processing for voting classifier}.
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{VotingMethod.drawio.png}
+\caption{Overview of Data Preprocessing for the Voting Classifier}
+\label{fig:flow chart of data processing for voting classifier}
+\end{figure}
+
+The chart clearly showcases the creation of decision tree models tailored for each group. Subsequently, utilizing the Voting Classifier approach, we amalgamated these models to formulate the final comprehensive model. This finalized model was trained on the identical dataset that the decision tree model, developed through the CART algorithm, was trained on.
+
+
+\subsubsection{Method using Random Forest}
+Random Forest, a distinguished ensemble machine learning technique, establishes its foundation on a multitude of decision trees during the training phase. In the Random Forest algorithm, these individual trees are constructed based on random subsets of the data through a process called bootstrapping. Additionally, at each split, a random subset of the features is considered. This randomness ensures diversity among the trees and reduces the potential of overfitting, making the ensemble more robust compared to a single decision tree.
+
+For our study, we employed the Random Forest algorithm from the Scikit-Learn library. Our model is composed of 100 individual decision trees, Furthermore, we've set a constraint ensuring that each tree doesn't exceed a depth of 10, striking an optimal balance between model complexity and performance.
+The dataset used for the Random Forest model was consistent with the one utilized for earlier techniques.
+
+
+
+% \section{Results}
+% \label{sec:results}
+% To determine the optimal parameters for the model, we employed the GridSearchCV function, which is a part of the Scikit-learn library . This exhaustive search method allowed us to identify the optimal parameter values for the model. The chosen parameters include the Gini criterion for the Gini impurity, a maximum depth of the tree as 6 levels, a minimum number of samples required to split an internal node of 4, and a minimum number of samples required at a leaf node of 4. The resulting model is presented in Figure 
+% \ref{fig1}. 
+
+% \begin{figure}[H]
+% \includegraphics[width=\textwidth]{deci-tree.png}
+% \caption{A decision-tree model for heart failure patients} \label{fig1}
+% \end{figure}
+
+% After training the model, we identified the most important features of the model. The features with the highest importance scores (>0.1) are 6MWT.DIST, CPX.TIME, and EXERCISE1. The remaining features, namely AGE, DIGOX, AF, OQLsub1, KIDNEY.DIS, DIUR, and DEATH?, have lower importance scores.
+
+% Due to the limitations of the paper, now let us consider three decision rules with the highest coverage (support). Reading the tree from the top, if the distance covered by the patient during the 6 minute walking test is higher than 402.5 meter, AND:
+% \begin{itemize}
+%     \item the exercise duration on a treadmill is lower or equal than 7.86 minutes, AND 
+%     the task performance duration is higher than 3.95 minutes, AND a patient does not suffer a kidney disease THEN the patient's NYHA class is two \textbf{(support: 29,49\%; accuracy: 78.9\%)};
+%    \item the exercise duration on a treadmill is higher than 12.858 minutes, AND the task performance duration is higher than 4.81 minutes, AND a patient does not suffer from atrial fibrillation, AND a patient is being treated with oral diuretics, AND a patient is younger than 75.5 years old THEN the patient's NYHA class is two \textbf{(support: 11,29\%, accuracy: 63.27\%)};
+%     \item the exercise duration on a treadmill is higher than 12.858 minutes, AND the task performance duration is lower or equal than 4.81 minutes, AND additionally the distance covered by the patient during the 6 minute walking test is higher than 497 meters, AND a patient scores higher than 4 points in the physical dimension of the QoL subscale THEN the patient's NYHA class is one \textbf{(support: 6.45\%, accuracy: 78.57\%)};
+% \end{itemize}
+
+% On the contrary, now let us consider three decision rules with the lowest support, as well as with highest accuracy. Reading the tree from the top, if the distance covered by the patient during the 6 minute walking test is lower or equal than 402.5 meter, AND:
+% \begin{itemize}
+%     \item the exercise duration on a treadmill is higher than 12.11 minutes, AND additionally the distance covered by the patient during the 6 minute walking test is lower or equal than 275 meters, AND a patient is younger than 62 years old THEN the patient's NYHA class is four \textbf{(support: 0.9\%, accuracy: 100\%)};
+%     \item the exercise duration on a treadmill is lower or equal than 12.11 minutes, AND patient is alive, AND the duration needed to complete the task is lower or equal than 7.65 minutes, AND a patient is younger than 67.5 years old THEN the patient's NYHA class is three \textbf{(support: 0.9\%, accuracy: 100\%)};
+% \end{itemize}
+
+% With a different first premise, the third decision rule with the lowest support states, that, if the distance covered by the patient during the 6 minute walking test is higher than 402.5 meter, AND the exercise duration on a treadmill is between 7.86 and 12.858 minutes, AND the duration needed to complete the task is lower or equal 3.95 minutes, THEN the patient's NYHA class is one \textbf{(support: 0.9\%, accuracy: 100\%)}.
+
+% Model was evaluated using the 10-fold cross-validation with stratification for testing. The cross-validation was repeated ten times, employing distinct random partitions of the dataset into training and testing sets. Stratification was employed to ensure that each fold of the dataset maintained consistent proportions of the target attribute. The model's accuracy was determined as the average accuracy across all ten folds.
+
+% The first approach yielded an average accuracy of 0.7626, indicating a probability of 76.26\% that our model accurately predicts class outcomes. In contrast, second approach demonstrated lower accuracy, with an average score of 0.6103. Therefore, our further analysis is focused on the first approach only.
+
+% To gain deeper insights into the model's performance, we conducted a comprehensive analysis of the confusion matrix (see Table \ref{tab:confusion_matrix}). The bold values in the table refer to the True Positive (TP) metric, which indicates the number of correctly classified examples for each class. The value in parentheses refers to the share of the number of examples for the actual class, regardless of whether the model's predictions for that class are correct or not.
+% \begin{table}[]
+% \centering
+% \label{tab:confusion_matrix}
+% \caption{Confusion matrix}
+% \begin{tabular}{|p{3.5cm}|p{2.5cm}|p{2.5cm}|p{2.2cm}|p{1.8cm}|}
+% \hline
+% Predicted / Actual          & NYHA I       & NYHA II      & NYHA III    & NYHA IV  \\ \hline
+% NYHA I                      & \textbf{50} (\textbf{64.94\%}) & 16 (7.2\%)   & 2 (1.6\%)   & 0        \\ \hline
+% NYHA II                     & 25 (32.47\%) & \textbf{196} (\textbf{88.3\%}) & 42 (33.6\%) & 0        \\ \hline
+% NYHA III                    & 2 (2.59\%)   & 10 (4.5\%)   & \textbf{81} (\textbf{64.8\%}) & 6 (60\%) \\ \hline
+% NYHA IV                     & 0            & 0            & 0           & \textbf{4} (\textbf{40\%}) \\ \hline
+% \end{tabular}
+% \end{table}
+% The model's performance for NYHA II can be considered relatively high with a score of 88.3\%. The scores for NYHA II and NYHA III, at 64.94\% and 64.8\%, attained moderately high scores. In contrast, the lowest performance was observed for NYHA IV, with a score of 40\%.
+
+% Based on the information provided in the confusion matrix, we computed several important metrics to evaluate the model's performance, including accuracy, precision, recall, and F1 score. Precision is the proportion of the correctly classified examples in a class out of the total examples classified in that class. Recall is the proportion of correctly classified examples in a class out of the total examples belonging to that class, while F1 score is harmonic mean of precision and recall. The closer the F1 score to 1, the better the classification result. The calculated results are summarized in Table \ref{tab:metrics}. 
+
+% \begin{table}[]
+% \centering
+% \caption{Evaluation metrics for classification model}
+% \label{tab:metrics}
+% \begin{tabular}{|p{2cm}|p{2cm}|p{1.5cm}|p{2cm}|}
+% \hline
+% \textbf{Class} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} \\ \hline
+% NYHA I         & 0.74               & 0.65            & 0.69              \\ 
+% NYHA II        & 0.75               & 0.88            & 0.81              \\ 
+% NYHA III       & 0.82               & 0.65            & 0.72              \\
+% NYHA IV        & 1.0                & 0.4             & 0.57              \\ \hline
+% \end{tabular}
+% \end{table}
+
+% The most numerous class in the dataset is NYHA II, and the highest F1-score of 0.81 was obtained for this class. This F1-score is high and indicates a good level of classification accuracy. In contrast, the worst F1-score of 0.57 was observed for the least numerous NYHA IV class. The result obtained for this class is relatively low compared to other classes. 
