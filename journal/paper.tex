@@ -495,7 +495,7 @@ In the conducted research, we used three methods of learning. Traiditional CART 
 
 \subsubsection{Method using CART algorithm}
 CART, which stands for Classification And Regression Trees, is a straightforward technique used for both classification and regression tasks. It operates by building a binary tree where every node signifies a specific check or condition on a single attribute. The tree grows from the top-down, employing a recursive method that continually divides data until it meets certain criteria. The process stops either when all instances at a particular node fall into a single category or when further division doesn't enhance the predictive accuracy. 
-In our study we took advantage of the CART algorithm from Scikit-Learn library. For the Decision Tree Classifier, we employed the Gini criterion which measures the frequency at which a randomly chosen element would be incorrectly classified. The tree was constrained to a maximum depth of 6 levels, ensuring simplicity and interpretability. We also specified that each leaf node should contain at least 4 samples, and any internal node requires at least 4 samples to consider a further split.  
+In our study we took advantage of the CART algorithm from Scikit-Learn library. For the Decision Tree Classifier, we employed the Gini criterion which measures the frequency at which a randomly chosen element would be incorrectly classified. The tree was constrained to a maximum depth of 5 levels, ensuring simplicity and interpretability. We also specified that each leaf node should contain at least 4 samples, and any internal node requires at least 4 samples to consider a further split.  
 
 The data preprocessing phase enabled us to isolate a subset of key attributes from each group, which were then employed to construct the decision tree. The procedural breakdown of the data processing is depicted in the flow chart shown in figure \ref{fig:flow chart of data processing} below.
 
@@ -563,77 +563,228 @@ For data preprocessing in the groups of Clinical, Comorbidities, Treatment, Bioc
 
 The chart clearly showcases the creation of decision tree models tailored for each group. Subsequently, utilizing the Voting Classifier approach, we amalgamated these models to formulate the final comprehensive model. This finalized model was trained on the identical dataset that the decision tree model, developed through the CART algorithm, was trained on.
 
-
 \subsubsection{Method using Random Forest}
 Random Forest, a distinguished ensemble machine learning technique, establishes its foundation on a multitude of decision trees during the training phase. In the Random Forest algorithm, these individual trees are constructed based on random subsets of the data through a process called bootstrapping. Additionally, at each split, a random subset of the features is considered. This randomness ensures diversity among the trees and reduces the potential of overfitting, making the ensemble more robust compared to a single decision tree.
 
 For our study, we employed the Random Forest algorithm from the Scikit-Learn library. Our model is composed of 100 individual decision trees, Furthermore, we've set a constraint ensuring that each tree doesn't exceed a depth of 10, striking an optimal balance between model complexity and performance.
 The dataset used for the Random Forest model was consistent with the one utilized for earlier techniques.
 
+\section{Result}
+\label{sec:result}
 
+To evaluate our models, we employed a 10-fold cross-validation method, incorporating stratification for testing purposes. This cross-validation process was undertaken ten times, each time with unique random splits of the dataset into training and test subsets. We used stratification to guarantee that every fold retained a consistent distribution of the target variable. The model's accuracy was measured by averaging the accuracy over all ten iterations of cross-validation.
 
-% \section{Results}
-% \label{sec:results}
-% To determine the optimal parameters for the model, we employed the GridSearchCV function, which is a part of the Scikit-learn library . This exhaustive search method allowed us to identify the optimal parameter values for the model. The chosen parameters include the Gini criterion for the Gini impurity, a maximum depth of the tree as 6 levels, a minimum number of samples required to split an internal node of 4, and a minimum number of samples required at a leaf node of 4. The resulting model is presented in Figure 
-% \ref{fig1}. 
+To further understand our model's effectiveness, we analyzed its confusion matrix, which is a tool that presents a comprehensive view of the model's accuracy by comparing its predictions against actual outcomes. This matrix segregates outcomes into four categories: true positives (TP), true negatives (TN), false positives (FP), and false negatives (FN). The true positive and true negative values denote accurate predictions, while false positive and false negative values indicate errors.
 
-% \begin{figure}[H]
-% \includegraphics[width=\textwidth]{deci-tree.png}
-% \caption{A decision-tree model for heart failure patients} \label{fig1}
-% \end{figure}
+From the confusion matrix, we extracted key performance indicators, such  as precision, recall, and the F1 score. Precision captures the fraction of accurate predictions within a class relative to all predictions for that class. Recall quantifies the fraction of accurate predictions within a class relative to all actual instances of that class. The F1 score, on the other hand, is the harmonic average of precision and recall, serving as a balanced metric. An F1 score closer to 1 indicates a more effective classification.
 
-% After training the model, we identified the most important features of the model. The features with the highest importance scores (>0.1) are 6MWT.DIST, CPX.TIME, and EXERCISE1. The remaining features, namely AGE, DIGOX, AF, OQLsub1, KIDNEY.DIS, DIUR, and DEATH?, have lower importance scores.
+\subsection{Decision Tree Model}
+\label{subsec:decision tree model}
 
-% Due to the limitations of the paper, now let us consider three decision rules with the highest coverage (support). Reading the tree from the top, if the distance covered by the patient during the 6 minute walking test is higher than 402.5 meter, AND:
-% \begin{itemize}
-%     \item the exercise duration on a treadmill is lower or equal than 7.86 minutes, AND 
-%     the task performance duration is higher than 3.95 minutes, AND a patient does not suffer a kidney disease THEN the patient's NYHA class is two \textbf{(support: 29,49\%; accuracy: 78.9\%)};
-%    \item the exercise duration on a treadmill is higher than 12.858 minutes, AND the task performance duration is higher than 4.81 minutes, AND a patient does not suffer from atrial fibrillation, AND a patient is being treated with oral diuretics, AND a patient is younger than 75.5 years old THEN the patient's NYHA class is two \textbf{(support: 11,29\%, accuracy: 63.27\%)};
-%     \item the exercise duration on a treadmill is higher than 12.858 minutes, AND the task performance duration is lower or equal than 4.81 minutes, AND additionally the distance covered by the patient during the 6 minute walking test is higher than 497 meters, AND a patient scores higher than 4 points in the physical dimension of the QoL subscale THEN the patient's NYHA class is one \textbf{(support: 6.45\%, accuracy: 78.57\%)};
-% \end{itemize}
+The resultant model is represented in Figure \ref{fig:decision tree model}.
 
-% On the contrary, now let us consider three decision rules with the lowest support, as well as with highest accuracy. Reading the tree from the top, if the distance covered by the patient during the 6 minute walking test is lower or equal than 402.5 meter, AND:
-% \begin{itemize}
-%     \item the exercise duration on a treadmill is higher than 12.11 minutes, AND additionally the distance covered by the patient during the 6 minute walking test is lower or equal than 275 meters, AND a patient is younger than 62 years old THEN the patient's NYHA class is four \textbf{(support: 0.9\%, accuracy: 100\%)};
-%     \item the exercise duration on a treadmill is lower or equal than 12.11 minutes, AND patient is alive, AND the duration needed to complete the task is lower or equal than 7.65 minutes, AND a patient is younger than 67.5 years old THEN the patient's NYHA class is three \textbf{(support: 0.9\%, accuracy: 100\%)};
-% \end{itemize}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{deci-tree.png}
+\caption{Decision Tree Model}
+\label{fig:decision tree model}
+\end{figure}
 
-% With a different first premise, the third decision rule with the lowest support states, that, if the distance covered by the patient during the 6 minute walking test is higher than 402.5 meter, AND the exercise duration on a treadmill is between 7.86 and 12.858 minutes, AND the duration needed to complete the task is lower or equal 3.95 minutes, THEN the patient's NYHA class is one \textbf{(support: 0.9\%, accuracy: 100\%)}.
+Before delving into the specifics of the model, it's pivotal to understand its structure and how to interpret the outcomes of the decision tree. Given that our model is a classification tree, it provides a structured framework that facilitates the derivation of decision rules. 
+It's worth noting that a detailed analysis of the model in this manner is uniquely possible for the decision tree approach. In the case of ensemble methods, the resultant models are inherently complex and challenging to visualize or interpret directly, given the multitude of individual models and their interactions.
 
-% Model was evaluated using the 10-fold cross-validation with stratification for testing. The cross-validation was repeated ten times, employing distinct random partitions of the dataset into training and testing sets. Stratification was employed to ensure that each fold of the dataset maintained consistent proportions of the target attribute. The model's accuracy was determined as the average accuracy across all ten folds.
+Let us consider three decision rules with the highest coverage (support). Reading the tree from the top, if the distance covered by the patient during the 6 minute walking test is higher than 402.5 meter, AND: 
 
-% The first approach yielded an average accuracy of 0.7626, indicating a probability of 76.26\% that our model accurately predicts class outcomes. In contrast, second approach demonstrated lower accuracy, with an average score of 0.6103. Therefore, our further analysis is focused on the first approach only.
+\begin{itemize}
+    \item the exercise duration on a treadmill is lower or equal than 7.86 minutes, AND 
+    the task performance duration is higher than 3.95 minutes, AND patient level blood of potassium is lower or equal than 1.525 mEq/L THEN the patient's NYHA class is two \textbf{(support: 29.7\%; accuracy: 79.07\%)};
 
-% To gain deeper insights into the model's performance, we conducted a comprehensive analysis of the confusion matrix (see Table \ref{tab:confusion_matrix}). The bold values in the table refer to the True Positive (TP) metric, which indicates the number of correctly classified examples for each class. The value in parentheses refers to the share of the number of examples for the actual class, regardless of whether the model's predictions for that class are correct or not.
-% \begin{table}[]
-% \centering
-% \label{tab:confusion_matrix}
-% \caption{Confusion matrix}
-% \begin{tabular}{|p{3.5cm}|p{2.5cm}|p{2.5cm}|p{2.2cm}|p{1.8cm}|}
-% \hline
-% Predicted / Actual          & NYHA I       & NYHA II      & NYHA III    & NYHA IV  \\ \hline
-% NYHA I                      & \textbf{50} (\textbf{64.94\%}) & 16 (7.2\%)   & 2 (1.6\%)   & 0        \\ \hline
-% NYHA II                     & 25 (32.47\%) & \textbf{196} (\textbf{88.3\%}) & 42 (33.6\%) & 0        \\ \hline
-% NYHA III                    & 2 (2.59\%)   & 10 (4.5\%)   & \textbf{81} (\textbf{64.8\%}) & 6 (60\%) \\ \hline
-% NYHA IV                     & 0            & 0            & 0           & \textbf{4} (\textbf{40\%}) \\ \hline
-% \end{tabular}
-% \end{table}
-% The model's performance for NYHA II can be considered relatively high with a score of 88.3\%. The scores for NYHA II and NYHA III, at 64.94\% and 64.8\%, attained moderately high scores. In contrast, the lowest performance was observed for NYHA IV, with a score of 40\%.
+    \item the exercise duration on a treadmill is higher than 12.858 minutes, AND the task performance duration is lower or equal than 4.81 minutes, AND additionally the distance covered by the patient during the 6 minute walking test is higher than 497 meters THEN the patient's NYHA class is one \textbf{(support: 12.2\%, accuracy: 67.9\%)};
 
-% Based on the information provided in the confusion matrix, we computed several important metrics to evaluate the model's performance, including accuracy, precision, recall, and F1 score. Precision is the proportion of the correctly classified examples in a class out of the total examples classified in that class. Recall is the proportion of correctly classified examples in a class out of the total examples belonging to that class, while F1 score is harmonic mean of precision and recall. The closer the F1 score to 1, the better the classification result. The calculated results are summarized in Table \ref{tab:metrics}. 
+    \item the exercise duration on a treadmill is higher than 12.86 minutes, AND the task performance duration is higher than 4.81 minutes, AND patient level of blood peptide is higher than 645 pg/mL THEN the patient's NYHA class is two \textbf{(support: 11,29\%, accuracy: 71.4\%)};
 
-% \begin{table}[]
-% \centering
-% \caption{Evaluation metrics for classification model}
-% \label{tab:metrics}
-% \begin{tabular}{|p{2cm}|p{2cm}|p{1.5cm}|p{2cm}|}
-% \hline
-% \textbf{Class} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} \\ \hline
-% NYHA I         & 0.74               & 0.65            & 0.69              \\ 
-% NYHA II        & 0.75               & 0.88            & 0.81              \\ 
-% NYHA III       & 0.82               & 0.65            & 0.72              \\
-% NYHA IV        & 1.0                & 0.4             & 0.57              \\ \hline
-% \end{tabular}
-% \end{table}
+  \end{itemize}
 
-% The most numerous class in the dataset is NYHA II, and the highest F1-score of 0.81 was obtained for this class. This F1-score is high and indicates a good level of classification accuracy. In contrast, the worst F1-score of 0.57 was observed for the least numerous NYHA IV class. The result obtained for this class is relatively low compared to other classes. 
+On the contrary, now let us consider three decision rules with the lowest support, as well as with highest accuracy. Reading the tree from the top, if the distance covered by the patient during the 6 minute walking test is lower or equal than 402.5 meter, AND:
+\begin{itemize}
+    \item the exercise duration on a treadmill is higher than 12.11 minutes, AND additionally the distance covered by the patient during the 6 minute walking test is lower or equal than 275 meters, AND a patient is treated with digoxin THEN the patient's NYHA class is four \textbf{(support: 0.9\%, accuracy: 100\%)};
+
+    \item the exercise duration on a treadmill is higher than 12.11 minutes, AND additionally the distance covered by the patient during the 6 minute walking test is higher than 275 meters, AND a patient level of blood peptide is between 393.35 and 615.5 pg/mL THEN the patient's NYHA class is three \textbf{(support: 0.9\%, accuracy: 100\%)}; 
+\end{itemize}
+
+With a different first premise, the third decision rule with the lowest support states, that, if the distance covered by the patient during the 6 minute walking test is higher than 402.5 meter, AND the exercise duration on a treadmill is between 7.86 and 12.858 minutes, AND the duration needed to complete the task is lower or equal 3.95 minutes, THEN the patient's NYHA class is one \textbf{(support: 0.9\%, accuracy: 100\%)}.
+
+Afterwards, we determined the model's accuracy by calculating the mean accuracy across the ten cross-validation iterations. The model showcased an accuracy of 0.7628, translating to a 76.28\% likelihood of the model making correct class predictions. Table \ref{tab:decision_tree_confusion_matrix} displays the confusion matrix for our decision tree model. Bolded figures in the matrix represent the True Positive (TP) counts, denoting correctly predicted instances for each respective class. Parenthetical values demonstrate the proportion of instances of the actual class, irrespective of the model's prediction accuracy for that class.
+
+\begin{table}[H]
+\centering
+\caption{Confusion matrix for Decision Tree}
+\label{tab:decision_tree_confusion_matrix}
+\begin{tabular}{|p{3.5cm}|p{2.5cm}|p{2.5cm}|p{2.2cm}|p{1.8cm}|}
+\hline
+Predicted / Actual          & NYHA I       & NYHA II      & NYHA III    & NYHA IV  \\ \hline
+NYHA I                      & \textbf{57} (\textbf{74.03\%}) & 26 (11.71\%)   & 3 ( 2.4\%)   & 0        \\ \hline
+NYHA II                     & 18 (23.37\%) & \textbf{190} (\textbf{85.59\%}) & 42 (33.6\%) & 0        \\ \hline
+NYHA III                    & 2 (2.6\%)   & 6 (2.7\%)   & \textbf{80} (\textbf{64\%}) & 6 (60\%) \\ \hline
+NYHA IV                     & 0            & 0            & 0           & \textbf{4} (\textbf{40\%}) \\ \hline
+\end{tabular}
+\end{table}
+In terms of class-specific performance, NYHA II stands out with a commendable score of 85.59\%. NYHA I and NYHA III classes followed closely with scores of 74.03\% and 64\% respectively. However, NYHA IV, despite its lower representation, lagged behind with a performance score of 40\%.
+
+Subsequently, we derived metrics like precision, recall, and the F1 score from the confusion matrix. These results are tabulated in Table \ref{tab:metrics decision tree}.
+
+\begin{table}[H]
+\centering
+\caption{Evaluation metrics for Decision Tree model}
+\label{tab:metrics decision tree}
+\begin{tabular}{|p{2cm}|p{2cm}|p{1.5cm}|p{2cm}|}
+\hline
+\textbf{Class} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} \\ \hline
+NYHA I         & 0.66               & 0.74            & 0.70              \\ 
+NYHA II        & 0.76               & 0.86            & 0.81              \\ 
+NYHA III       & 0.85               & 0.64            & 0.73              \\
+NYHA IV        & 1.0                & 0.40             & 0.57              \\ \hline
+\end{tabular}
+\end{table}
+
+The dataset prominently features the NYHA II class, which achieved the highest F1-score of 0.81, signifying excellent classification precision and recall. On the contrary, NYHA IV, being the least represented class, had the lowest F1-score of 0.57. This score, when juxtaposed with the others, is comparatively lower. The F1-scores for NYHA I and NYHA III were 0.70 and 0.73, respectively, indicating reasonable performance for these classes.
+
+Table \ref{tab:decision_tree_feature_importance} presents a delineation of features based on their importance scores.
+
+\begin{table}[H]
+  \centering
+  \caption{Feature Importances in Decision Tree Model}
+  \label{tab:decision_tree_feature_importance}
+  \begin{tabular}{|p{3cm}|p{2.5cm}|}
+  \hline
+  \textbf{Feature} & \textbf{Importance} \\ \hline
+  6MWT.DIST & 0.402410 \\
+  CPX.TIME & 0.222276 \\
+  EXERCISE1 & 0.135803 \\
+  BNP & 0.108318 \\
+  HB & 0.033999 \\
+  K & 0.032225 \\
+  DIGOX & 0.023390 \\
+  DEATH? & 0.013112 \\
+  AGE & 0.000000 \\
+  MR & 0.000000 \\
+  QOL & 0.000000 \\
+  AF & 0.000000 \\
+  DM & 0.000000 \\
+  KIDNEY.DIS & 0.000000 \\
+  DIUR & 0.000000 \\ \hline
+  \end{tabular}
+\end{table}
+
+From the table the feature 6MWT.DIST, representing the distance covered in a 6-minute walking test, emerges  as the most influential, followed by CPX.TIME and EXERCISE1. However, it's crucial to note that the several features, such as AGE, MR, QOL, AF, DM, KIDNEY.DIS, and DIUR, have been assigned an importance score of 0.0. This suggests that they did not contribute to the model's decision-making process. As a result, these variables are conspicuously absent in the decision tree visualized in the Figure \ref{fig:decision tree model}, underscoring the model's ability to prioritize and discern between the variables based on their relevance.
+
+In summary, the decision tree model demonstrated a commendable average accuracy of 76.28\%, with particular prominence in the NYHA II class, while certain features such as 6MWT.DIST significantly influenced its predictions.
+
+\subsection{Random Forest Model}
+\label{subsec:random_forest_model}
+
+Owing to the intricate nature of the Random Forest model and the fact that it comprises multiple decision trees, a direct visualization of the model isn't practical. The model showcased a performance metric of 0.9677, signifying a 96.7\% probability of accurately predicting class outcomes. The confusion matrix associated with our Random Forest model is detailed in Table \ref{tab:random_forest_confusion_matrix}.
+
+\begin{table}[H]
+  \centering
+  \caption{Confusion matrix for Random Forest model}
+  \label{tab:random_forest_confusion_matrix}
+  \begin{tabular}{|p{3.5cm}|p{2.5cm}|p{2.5cm}|p{2.2cm}|p{1.8cm}|}
+  \hline
+  Predicted / Actual          & NYHA I       & NYHA II      & NYHA III    & NYHA IV  \\ \hline
+  NYHA I                      & \textbf{73} (\textbf{94.8\%}) & 0  & 0 & 0        \\ \hline
+  NYHA II                     & 4 (5.2\%) & \textbf{222} (\textbf{100\%}) & 10 (8\%) & 0        \\ \hline
+  NYHA III                    & 0  & 0  & \textbf{115} (\textbf{92\%}) & 0 \\ \hline
+  NYHA IV                     & 0            & 0            & 0           & \textbf{10} (\textbf{100\%}) \\ \hline
+  \end{tabular}
+\end{table}
+
+  Delving into the Random Forest model's confusion matrix reveals the excellent performance of the model. The NYHA I class boasts a 94.8\% accuracy, with only a minor portion misclassified as NYHA II. Meanwhile, the NYHA II class stands out with a flawless 100\% accuracy, althrough it occasionally misclassifies 8\% of NYHA III instances. The NYHA III class itself performs commendably with 92\% accuracy. Finally, the NYHA IV class also achieves a perfect 100\% accuracy. Overall, the Random Forest model displays outstanding precision across all classes. 
+
+  The performance metrics of the Random Forest model are detailed in Table \ref{tab:metrics random forest}
+  \begin{table}[H]
+    \centering
+    \caption{Evaluation metrics for Random Forest mode}
+    \label{tab:metrics random forest}
+    \begin{tabular}{|p{2cm}|p{2cm}|p{1.5cm}|p{2cm}|}
+    \hline
+    \textbf{Class} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} \\ \hline
+    NYHA I         & 1.0               & 0.95            & 0.97              \\ 
+    NYHA II        & 0.94               & 1.0            & 0.97              \\ 
+    NYHA III       & 1.0               & 0.92            & 0.96              \\
+    NYHA IV        & 1.0                & 1.0             & 1.00              \\ \hline
+    \end{tabular}
+    \end{table}
+
+    The evaluation metrics for the Random Forest model showcase its exemplary performance. The model achieved perfect precision across all classes. NYHA I demonstrated a recall of 0.95, leading to an F1-score of 0.97. The NYHA II class achieved an F1-score of 0.97 with a recall of 1.0. The NYHA III class, while maintaining a perfect precision, reported a recall of 0.92 and an F1-score of 0.96. The less frequent NYHA IV class secured perfect scores in all three metrics, underscoring the model's robust classification abilities across diverse classes.
+
+    The Random Forest model computes the feature importance scores by averaging the feature importance scores of all the decision trees in the ensemble. Table \ref{tab:random_forest_feature_importance} presents the feature importance scores for the Random Forest model.
+
+    \begin{table}[H]
+      \centering
+      \caption{Feature Importances in Decision Tree Model}
+      \label{tab:decision_tree_feature_importance}
+      \begin{tabular}{|p{3cm}|p{2.5cm}|}
+      \hline
+      \textbf{Feature} & \textbf{Importance} \\ \hline
+      6MWT.DIST &    0.159156 \\
+      CPX.TIME  &    0.140504 \\
+      EXERCISE1 &    0.114844 \\
+      BNP       &    0.102997 \\
+      QOL       &    0.093678 \\
+      K         &    0.090964 \\
+      AGE       &    0.081295 \\
+      HB        &    0.075023 \\
+      MR        &    0.039724 \\
+      DIUR      &    0.020477 \\
+      DEATH?    &    0.018700 \\
+      DM        &    0.016911 \\
+      AF        &    0.016728 \\
+      DIGOX     &    0.016259 \\
+      KIDNEY.DIS &   0.012739 \\ \hline
+      \end{tabular}
+    \end{table}
+
+    In our Random Forest model, much like the Decision Tree model, the 6MWT.DIST attribute was identified as the most pivotal, boasting an importance score of 0.159156, signifying its crucial role in determining the target class. This was closely followed by CPX.TIME and EXERCISE1, with importance scores of 0.140504 and 0.114844 respectively. The influence of the other features was relatively less pronounced in the model's decision-making process.
+
+    To conclude, the Random Forest model has showcased remarkable proficiency in categorizing, managing each class with notable precision and accuracy.
+
+\subsection{Voting Classifier Model}
+\label{subsec:voting_classifier_model}
+
+Analogous to the Random Forest model, the Voting Classifier is another ensemble technique, making its direct visualization impractical. This model registered an impressive accuracy rate of 99.54\%, indicating a high likelihood of making correct class predictions. The corresponding confusion matrix for the Voting Classifier model can be found in Table \ref{tab:voting_classifier_confusion_matrix}.
+
+\begin{table}[H]
+  \centering
+  \caption{Confusion matrix for Voting Classifier model}
+  \label{tab:voting_classifier_confusion_matrix}
+  \begin{tabular}{|p{3.5cm}|p{2.5cm}|p{2.5cm}|p{2.4cm}|p{1.8cm}|}
+  \hline
+  Predicted / Actual          & NYHA I       & NYHA II      & NYHA III    & NYHA IV  \\ \hline
+  NYHA I                      & \textbf{76} (\textbf{98.7\%}) & 0  & 0 & 0        \\ \hline
+  NYHA II                     & 0 & \textbf{222} (\textbf{100\%}) & 0 & 0        \\ \hline
+  NYHA III                    & 1 (1.3\%) & 0  & \textbf{125} (\textbf{100\%}) & 1 (10\%) \\ \hline
+  NYHA IV                     & 0            & 0            & 0           & \textbf{9} (\textbf{90\%}) \\ \hline
+  \end{tabular}
+\end{table}
+
+The model exhibits remarkable accuracy for the NYHA I and NYHA II classes, achieving 98.7\% and a perfect 100\% respectively. The NYHA III class also performs outstandingly, with a 100\% accuracy rate. The NYHA IV class, on the other hand has a relatively lower accuracy rate of 90\%, indicating a minor misclassification towards the NYHA III class. Overall, the Voting Classifier model demonstrates a high degree of precision across all the classes, reinforcing its reliability.
+
+The evaluation metrics for the Voting Classifier model are presented in Table \ref{tab:metrics voting classifier}.
+
+\begin{table}[H]
+  \centering
+  \caption{Evaluation metrics for Voting Classifier model}
+  \label{tab:metrics voting classifier}
+  \begin{tabular}{|p{2cm}|p{2cm}|p{1.5cm}|p{2cm}|}
+  \hline
+  \textbf{Class} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} \\ \hline
+  NYHA I         & 1.0               & 0.99            & 0.99              \\ 
+  NYHA II        & 1.0               & 1.0            & 1.0              \\ 
+  NYHA III       & 0.98               & 1.0            & 0.99              \\
+  NYHA IV        & 1.0                & 0.9             & 0.95              \\ \hline
+  \end{tabular}
+\end{table}
+
+The Voting Classifier model has flawlessly achieved a precision of 1.0 across almost all the classes, with the exception of the NYHA III class, which has a precision of 0.98. For the NYHA I class, the recall and F1-score both stand at 0.99. The NYHA II class maintains a perfect recall and F1-score of 1.0. While NYHA III class has a recall of 1.0 and an F1-score of 0.99. Lastly, the NYHA IV class, though having a slightly lower recall of 0.9, still maintains a high F1-score of 0.95. This data accentuates the model's proficiency in classifying instances across different classes with high precision and recall.
+
